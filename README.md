@@ -17,9 +17,9 @@ To learn more please visit the release notes at [this URL](https://docs.cloudera
 
 This repository showcases the following 1.19 capabilities:
 
-* Interactive Sessions
-* Using CDE Airflow Jobs with File Resources
-* Spark Submit Migration Tool
+* Interactive Sessions [link](https://github.com/pdefusco/CDE_1.19_NewFeatures#interactive-sessions)
+* Using CDE Airflow Jobs with File Resources [link](https://github.com/pdefusco/CDE_1.19_NewFeatures#using-cde-airflow-jobs-with-file-resources)
+* Spark Submit Migration Tool [link](https://github.com/pdefusco/CDE_1.19_NewFeatures#spark-submit-migration-tool)
 
 ## Requirements
 
@@ -32,11 +32,11 @@ You can reproduce these use cases in your CDE Virtual Cluster:
 
 Clone this git repository to a local folder on your machine. All files and dependencies are included in this project.
 
-## Interactive Sessions [link](https://github.com/pdefusco/CDE_1.19_NewFeatures#interactive-sessions)
+## Interactive Sessions
 
-## Using CDE Airflow Jobs with File Resources [link](https://github.com/pdefusco/CDE_1.19_NewFeatures#using-cde-airflow-jobs-with-file-resources)
+## Using CDE Airflow Jobs with File Resources
 
-## Spark Submit Migration Tool [link](https://github.com/pdefusco/CDE_1.19_NewFeatures#spark-submit-migration-tool)
+## Spark Submit Migration Tool
 
 ## Conclusions & Next Steps
 
