@@ -21,18 +21,86 @@ This repository showcases the following 1.19 capabilities:
 * Using CDE Airflow Jobs with File Resources [link](https://github.com/pdefusco/CDE_1.19_NewFeatures#using-cde-airflow-jobs-with-file-resources)
 * Spark Submit Migration Tool [link](https://github.com/pdefusco/CDE_1.19_NewFeatures#spark-submit-migration-tool)
 
+
 ## Requirements
 
 You can reproduce these use cases in your CDE Virtual Cluster:
 
-* CDE Version 1.19 in Private or Public Cloud (AWS, Azure, OCP and Cloudera ECS ok).
+* CDE Service Version 1.19 in Private or Public Cloud (AWS, Azure, OCP and Cloudera ECS ok).
+* A CDE Virtual Cluster of type "All-Purpose".
 * Basic familiarity with Python, PySpark, Airflow and Docker.
+
 
 ## Project Setup
 
 Clone this git repository to a local folder on your machine. All files and dependencies are included in this project.
 
+
 ## Interactive Sessions
+
+From the CDE Landing Page open "Sessions" on the left pane and then select the CDE Virtual Cluster where you want to run your CDE Interactive Session.
+
+![alt text](img/cde_session_0.png)
+
+![alt text](img/cde_session_0_b.png)
+
+The session will be in "starting" state for a few moments. When it's ready, launch it and open the Spark Shell by clicking on the "Interact" tab.
+
+Copy and paste the following code snippets in each cell and observe the output (no code changes required).
+
+Import PySpark:
+
+```
+from pyspark.sql import SparkSession
+from pyspark.sql.types import Row, StructField, StructType, StringType, IntegerType
+```
+
+Launch the Spark Session:
+
+```
+spark = SparkSession\
+    .builder\
+    .appName("PythonSQL")\
+    .getOrCreate()
+```
+
+Create a list of Rows. Infer schema from the first row, create a DataFrame and print the schema:
+
+```
+rows = [Row(name="John", age=19), Row(name="Smith", age=23), Row(name="Sarah", age=18)]
+some_df = spark.createDataFrame(rows)
+some_df.printSchema()
+```
+
+Create a list of tuples:
+
+```
+tuples = [("John", 19), ("Smith", 23), ("Sarah", 18)]
+```
+
+Create a Spark schema with two fields - person_name and person_age
+
+```
+schema = StructType([StructField("person_name", StringType(), False),
+                    StructField("person_age", IntegerType(), False)])
+```
+
+Create a DataFrame by applying the schema to the RDD and print the schema
+
+```
+another_df = spark.createDataFrame(tuples, schema)
+another_df.printSchema()
+```
+
+Iterate through the Spark Dataframe:
+
+```
+for each in another_df.collect():
+    print(each[0])
+```
+
+![alt text](img/cde_session_1.png)
+
 
 ## Using CDE Airflow Jobs with File Resources
 
