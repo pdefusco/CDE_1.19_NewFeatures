@@ -104,6 +104,93 @@ for each in another_df.collect():
 
 ## Using CDE Airflow Jobs with File Resources
 
+Until CDE 1.18 File resources allowed you to mount files with CDE Spark Jobs only. CDE 1.19 introduces the ability to leverage File Resources with CDEc Airflow jobs. In practice, this means that you can use an Airflow Operator to parse values from files loaded on CDE File Resources and execute conditional logic in your DAG with them.
+
+Open the ```airflow_dag.py``` file located in the ```cde_jobs``` folder. Familiarize yourself with the code. Notice the following:
+
+* Lines 84-88: an instance of BashOperator is used to read the file from the CDE File Resource. Notice that we save the value as an xcom variable at line 87. Xcoms allow you to temporarily store values so they are accessible by other operators.
+
+```
+read_conf = BashOperator(
+      task_id="read-resource-file-task",
+      bash_command="cat /app/mount/my_airflow_file_resource/my_file.conf",
+        do_xcom_push=True
+  )
+```
+
+* Line 90-96: an instance of the PythonOperator is used to parse the value read from the file via Xcom. You can use a similar approach to transform, process and refine values read from files.
+
+```
+def _print_confs(**context):
+    return context['ti'].xcom_pull(task_ids='read-resource-file-task')
+
+pythonstep = PythonOperator(
+    task_id="print_file_resource_confs",
+    python_callable=_print_confs,
+)
+```
+
+* Lines 98-108: Airflow Task Branching is used to make a decision based on the value read from the File Resource. In this example we use two instance of EmptyOperator (lines 110 and 11) but you can more generally use this approach to implement complex logic in your DAG.
+
+```
+@task.branch(task_id="branch_task")
+def branch_func(**context):
+    airflow_file_resource_value = int(context['ti'].xcom_pull(task_ids="read-resource-file-task"))
+    if airflow_file_resource_value >= 5:
+        return "continue_task"
+    elif airflow_file_resource_value >= 2 and airflow_file_resource_value < 5:
+        return "stop_task"
+    else:
+        return None
+
+branch_op = branch_func()
+
+continue_op = EmptyOperator(task_id="continue_task")
+stop_op = EmptyOperator(task_id="stop_task")
+```
+
+#### Steps to Reproduce in your CDE Cluster
+
+Create a CDE Spark Job with name ```spark-sql``` without running it.
+
+Open your local terminal and run the following CDE CLI commands.
+
+>**⚠ Warning**  
+>This tutorial utilizes a CDE 1.19 Virtual Cluster. If you already had the CLI installed you will have to reinstall it. The fastest way to check is by running ```cde --version``` from your terminal. For instructions on installing the CLI please visit the [documentation](https://docs.cloudera.com/data-engineering/cloud/cli-access/topics/cde-cli.html)
+
+Create a File Resource for your Airflow Job:
+
+```
+cde resource create --name my_pipeline_resource
+```
+
+Upload the Airflow DAG script to the CDE File Resource:
+
+```
+cde resource upload --name my_pipeline_resource --local-path airflow_dag.py
+```
+
+Create a File Resource for your Airflow Dependency File:
+
+```
+cde resource create --name my_airflow_file_resource
+```
+
+Upload the Airflow Dependency File to the File Resource:
+
+```
+cde resource upload --name my_pipeline_resource --local-path cde_jobs/airflow_dag.py
+```
+
+Run the CDE Airflow Job:
+
+```
+cde job create --name my_pipeline --type airflow --dag-file airflow_dag.py --mount-1-resource my_pipeline_resource --airflow-file-mount-1-resource my_airflow_file_resource
+```
+
+Navigate back to the CDE Job Runs page and validate outputs in the Logs tabs.
+
+
 ## Spark Submit Migration Tool
 
 The CDE CLI provides a similar although not identical way of running "spark-submits" in CDE. However, adapting many spark-submit command to CDE might become an obstacle. The CDE Engineering team created a Spark Migration tool to facilitate the conversion of a spark-submit to a cde spark-submit.

@@ -55,9 +55,6 @@ print("Running as Username: ", username)
 
 cde_spark_job_name = 'spark-sql'
 
-"""cde_job_name_07_B = '07_B_pyspark_RIGHT'
-cde_job_name_07_C = '07_C_pyspark_JOIN'"""
-
 default_args = {
         'owner': username,
         'retry_delay': timedelta(seconds=5),
@@ -86,7 +83,8 @@ with DAG(
 
     read_conf = BashOperator(
         	task_id="read-resource-file-task",
-        	bash_command="cat /app/mount/my_airflow_file_resource/my_file.conf"
+        	bash_command="cat /app/mount/my_airflow_file_resource/my_file.conf",
+            do_xcom_push=True
     	)
 
     def _print_confs(**context):
@@ -111,5 +109,6 @@ with DAG(
 
     continue_op = EmptyOperator(task_id="continue_task")
     stop_op = EmptyOperator(task_id="stop_task")
+
 
 start >> spark_sql >> read_conf >> pythonstep >> branch_op >> [continue_op, stop_op]
