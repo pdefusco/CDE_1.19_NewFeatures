@@ -41,13 +41,15 @@
 from cloudera.cdp.airflow.operators.cde_operator import CDEJobRunOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
+from airflow.operators.empty import EmptyOperator
 from airflow.operators.bash import BashOperator
 from datetime import datetime, timedelta
 from dateutil import parser
+from airflow.decorators import task
 from airflow import DAG
 import pendulum
 
-username = "pdefusco_020723"
+username = "pdefusco_052923"
 
 print("Running as Username: ", username)
 
@@ -66,44 +68,48 @@ default_args = {
 
 dag_name = '{}-airflow-dag'.format(username)
 
-dag = DAG(
+with DAG(
         dag_name,
         default_args=default_args,
         schedule_interval='@daily',
         catchup=False,
         is_paused_upon_creation=False
-        )
+        ) as dag:
 
-start = DummyOperator(
-                task_id="start",
-                dag=dag)
+    start = DummyOperator(
+                    task_id="start")
 
-spark_sql = CDEJobRunOperator(
-        task_id='create-left-table',
-        dag=dag,
-        job_name=cde_spark_job_name
-        )
+    spark_sql = CDEJobRunOperator(
+            task_id='sparksql-task',
+            job_name=cde_spark_job_name
+            )
 
-read_conf = BashOperator(
-    	task_id="read_conf",
-        dag=dag,
-    	bash_command="cat /app/mount/my_file_resource/my_file.conf"
-	)
+    read_conf = BashOperator(
+        	task_id="read-resource-file-task",
+        	bash_command="cat /app/mount/my_airflow_file_resource/my_file.conf"
+    	)
 
-"""read_conf = BashOperator(
-    	task_id="read_conf",
-        dag=dag,
-    	bash_command="cat /app/mount/my_file_resource/my_file.conf",
-        xcom_push=True
-	)
+    def _print_confs(**context):
+        return context['ti'].xcom_pull(task_ids='read-resource-file-task')
 
-def _print_confs(**context):
-    return context['ti'].xcom_pull(task_ids='read_conf')
+    pythonstep = PythonOperator(
+        task_id="print_file_resource_confs",
+        python_callable=_print_confs,
+    )
 
-apiresponse_step5 = PythonOperator(
-    task_id="print_file_resource_confs",
-    python_callable=_print_confs,
-    dag=dag
-)"""
+    @task.branch(task_id="branch_task")
+    def branch_func(**context):
+        airflow_file_resource_value = int(context['ti'].xcom_pull(task_ids="read-resource-file-task"))
+        if airflow_file_resource_value >= 5:
+            return "continue_task"
+        elif airflow_file_resource_value >= 2 and airflow_file_resource_value < 5:
+            return "stop_task"
+        else:
+            return None
 
-start >> spark_sql >> read_conf #>> apiresponse_step5
+    branch_op = branch_func()
+
+    continue_op = EmptyOperator(task_id="continue_task")
+    stop_op = EmptyOperator(task_id="stop_task")
+
+start >> spark_sql >> read_conf >> pythonstep >> branch_op >> [continue_op, stop_op]
