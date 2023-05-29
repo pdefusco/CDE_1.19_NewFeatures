@@ -149,14 +149,14 @@ continue_op = EmptyOperator(task_id="continue_task")
 stop_op = EmptyOperator(task_id="stop_task")
 ```
 
-#### Steps to Reproduce in your CDE Cluster
+#### Steps to Reproduce the Example in your CDE Cluster
 
-Create a CDE Spark Job with name ```spark-sql``` without running it.
+Using the CDE Jobs UI create a CDE Spark Job with name ```spark-sql``` without running it.
 
 Open your local terminal and run the following CDE CLI commands.
 
 >**⚠ Warning**  
->This tutorial utilizes a CDE 1.19 Virtual Cluster. If you already had the CLI installed you will have to reinstall it. The fastest way to check is by running ```cde --version``` from your terminal. For instructions on installing the CLI please visit the [documentation](https://docs.cloudera.com/data-engineering/cloud/cli-access/topics/cde-cli.html)
+>A CDE 1.19 Virtual Cluster is required. If you already had the CLI installed you will have to reinstall it. The fastest way to check is by running ```cde --version``` from your terminal. For instructions on installing the CLI please visit the [documentation](https://docs.cloudera.com/data-engineering/cloud/cli-access/topics/cde-cli.html)
 
 Create a File Resource for your Airflow Job:
 
