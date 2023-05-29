@@ -171,7 +171,7 @@ Navigate to your CDE Virtual Cluster Job Runs page and validate the job is runni
 ![alt text](img/job_submit_confirm3.png)
 
 >**⚠ Warning**  
->If you are unable to run the spark-submit you may have to remove the tls setting from config.yaml. In other words, completely erase line 4.
+>If you are unable to run the spark-submit you may have to remove the tls setting from config.yaml. In other words, completely erase line 4 from your config file under the .cde folder.
 
 
 ## Conclusions & Next Steps
