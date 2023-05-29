@@ -192,11 +192,11 @@ Navigate back to the CDE Job Runs page and validate outputs in the Logs tabs.
 
 ![alt text](img/check_job_1.png)
 
-Open the Airflow UI and validate the branch chosen by the Airflow DAG.
+Open the Airflow UI and validate job execution.
 
 ![alt text](img/check_job_2.png)
 
-You can choose from a variety of Airflow monitoring options. For example the Graph tab:
+You can choose from a variety of Airflow monitoring options. For example the Graph tab provides a way to validate which branch was chosen by the Airflow DAG.
 
 ![alt text](img/check_job_3.png)
 
