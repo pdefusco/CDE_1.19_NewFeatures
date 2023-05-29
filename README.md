@@ -108,7 +108,7 @@ Until CDE 1.18 File resources allowed you to mount files with CDE Spark Jobs onl
 
 Open the ```airflow_dag.py``` file located in the ```cde_jobs``` folder. Familiarize yourself with the code. Notice the following:
 
-* Lines 84-88: an instance of BashOperator is used to read the file from the CDE File Resource. Notice that we save the value as an xcom variable at line 87. Xcoms allow you to temporarily store values so they are accessible by other operators.
+* Lines 84-88: an instance of BashOperator is used to read the file from the CDE File Resource. Notice that we save the value as an xcom variable at line 87. Xcoms allow you to temporarily store values so they are accessible by other operators. Also notice that ```my_airflow_file_resource``` is the name of the CDE Resource while ```my_file.conf``` is the name of the File we will upload in it.
 
 ```
 read_conf = BashOperator(
@@ -118,7 +118,7 @@ read_conf = BashOperator(
   )
 ```
 
-* Line 90-96: an instance of the PythonOperator is used to parse the value read from the file via Xcom. You can use a similar approach to transform, process and refine values read from files.
+* Line 90-96: an instance of the PythonOperator is used to parse the value read from the Airflow Job Dependency file via Xcom. In general you can use a similar approach to transform, process and refine values read from files.
 
 ```
 def _print_confs(**context):
@@ -189,6 +189,16 @@ cde job create --name my_pipeline --type airflow --dag-file airflow_dag.py --mou
 ```
 
 Navigate back to the CDE Job Runs page and validate outputs in the Logs tabs.
+
+![alt text](img/check_job_1.png)
+
+Open the Airflow UI and validate the branch chosen by the Airflow DAG.
+
+![alt text](img/check_job_2.png)
+
+You can choose from a variety of Airflow monitoring options. For example the Graph tab:
+
+![alt text](img/check_job_3.png)
 
 
 ## Spark Submit Migration Tool
