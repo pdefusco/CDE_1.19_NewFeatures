@@ -151,7 +151,7 @@ stop_op = EmptyOperator(task_id="stop_task")
 
 #### Steps to Reproduce the Example in your CDE Cluster
 
-Using the CDE Jobs UI create a CDE Spark Job with name ```spark-sql``` without running it.
+Using the CDE Jobs UI create a CDE Spark Job with name ```spark-sql``` with the ```pyspark_sql.py``` script without running it.
 
 Open your local terminal and run the following CDE CLI commands.
 
@@ -179,7 +179,7 @@ cde resource create --name my_airflow_file_resource
 Upload the Airflow Dependency File to the File Resource:
 
 ```
-cde resource upload --name my_pipeline_resource --local-path cde_jobs/airflow_dag.py
+cde resource upload --name my_airflow_file_resource --local-path my_file.conf
 ```
 
 Run the CDE Airflow Job:
