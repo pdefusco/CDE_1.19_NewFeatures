@@ -38,6 +38,8 @@ Clone this git repository to a local folder on your machine. All files and depen
 
 ## Interactive Sessions
 
+### Using Interactive Sessions in the CDE UI
+
 From the CDE Landing Page open "Sessions" on the left pane and then select the CDE Virtual Cluster where you want to run your CDE Interactive Session.
 
 ![alt text](img/cde_session_0.png)
@@ -100,6 +102,32 @@ for each in another_df.collect():
 ```
 
 ![alt text](img/cde_session_1.png)
+
+### Using Interactive Sessions with the CDE CLI
+
+You can interact with the same CDE Session from your local terminal using the ```cde sessions interact``` command.
+
+Open your terminal and enter ```cde session interact --name InteractiveSession```. You will be prompted for your password and then the SparkShell will launch.
+
+Run the same PySpark code into the shell.
+
+![alt text](img/sparkshell1.png)
+
+![alt text](img/sparkshell2.png)
+
+Navigate back to the CDE Session and validate that the code has run from the UI.
+
+![alt text](img/sparkshellcdeui.png)
+
+You can also create a session directly from the CLI. In your local terminal, exit out of your current Spark Shell with "ctrl+D" and then run the following command:
+
+```cde session create --name cde_shell_from_cli --type spark-scala --description launched-from-cli --executor-cores 4 --num-executors 2```.
+
+Notice that you can pass CDE Compute Options such as number of executors and executor-cores when using the command.
+
+![alt text](img/sparkshell3.png)
+
+![alt text](img/sparkshell4_cdeui.png)
 
 
 ## Using CDE Airflow Jobs with File Resources
