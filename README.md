@@ -110,7 +110,7 @@ Run the same PySpark code into the shell.
 
 Navigate back to the CDE Session and validate that the code has run from the UI.
 
-![alt text](img/sparkshellcdeui.png)
+![alt text](img/sparkshell2_b.png)
 
 You can also create a session directly from the CLI. In your local terminal, exit out of your current Spark Shell with "ctrl+D" and then run the following command:
 
