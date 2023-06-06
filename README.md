@@ -51,7 +51,7 @@ The session will be in "starting" state for a few moments. When it's ready, laun
 Copy and paste the following code snippets in each cell and observe the output (no code changes required).
 
 >**Note**  
->CDE Sessions do not require creating the SparkSesssion object. The shell has already been launched for you. However, if you need to import any types or functions you do have to import the necessary modules.
+>CDE Sessions do not require creating the SparkSession object. The shell has already been launched for you. However, if you need to import any types or functions you do have to import the necessary modules.
 
 Import PySpark:
 
@@ -106,7 +106,7 @@ Run the same PySpark code into the shell.
 
 ![alt text](img/sparkshell1.png)
 
-![alt text](img/sparksehll2.png)
+![alt text](img/sparksehll2_a.png)
 
 Navigate back to the CDE Session and validate that the code has run from the UI.
 
