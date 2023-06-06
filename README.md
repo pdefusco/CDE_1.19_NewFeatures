@@ -50,20 +50,13 @@ The session will be in "starting" state for a few moments. When it's ready, laun
 
 Copy and paste the following code snippets in each cell and observe the output (no code changes required).
 
+>**Note**  
+>CDE Sessions do not require creating the SparkSesssion object. The shell has already been launched for you. However, if you need to import any types or functions you do have to import the necessary modules.
+
 Import PySpark:
 
 ```
-from pyspark.sql import SparkSession
 from pyspark.sql.types import Row, StructField, StructType, StringType, IntegerType
-```
-
-Launch the Spark Session:
-
-```
-spark = SparkSession\
-    .builder\
-    .appName("PythonSQL")\
-    .getOrCreate()
 ```
 
 Create a list of Rows. Infer schema from the first row, create a DataFrame and print the schema:
