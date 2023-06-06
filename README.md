@@ -113,7 +113,7 @@ Run the same PySpark code into the shell.
 
 ![alt text](img/sparkshell1.png)
 
-![alt text](img/sparkshell2.png)
+![alt text](img/sparksehll2.png)
 
 Navigate back to the CDE Session and validate that the code has run from the UI.
 
